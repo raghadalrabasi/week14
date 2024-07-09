@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visit History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #history {
+            margin-top: 20px;
+        }
+        button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Visit History</h1>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <button id="clear">Clear History</button>
+    <div id="history"></div>
+
+    <script src="script.js">
+        // Function to update the visit history display
+function updateHistoryDisplay() {
+    const historyDiv = document.getElementById('history');
+    const history = JSON.parse(localStorage.getItem('visitHistory')) || [];
+    historyDiv.innerHTML = '<h2>Visit History</h2>';
+    if (history.length === 0) {
+        historyDiv.innerHTML += '<p>No visits recorded.</p>';
+    } else {
+        const list = document.createElement('ul');
+        history.forEach((visit, index) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${index + 1}. ${visit}`;
+            list.appendChild(listItem);
+        });
+        historyDiv.appendChild(list);
+    }
+}
+
+// Function to start logging visits
+function startLogging() {
+    const visitHistory = JSON.parse(localStorage.getItem('visitHistory')) || [];
+    const now = new Date();
+    visitHistory.push(`Visited at: ${now.toLocaleString()}`);
+    localStorage.setItem('visitHistory', JSON.stringify(visitHistory));
+    updateHistoryDisplay();
+}
+
+// Function to clear visit history
+function clearHistory() {
+    localStorage.removeItem('visitHistory');
+    updateHistoryDisplay();
+}
+
+// Add event listeners to the buttons
+document.getElementById('start').addEventListener('click', startLogging);
+document.getElementById('stop').addEventListener('click', () => {
+    alert('Logging stopped.');
+});
+document.getElementById('clear').addEventListener('click', clearHistory);
+
+// Update the display when the page loads
+updateHistoryDisplay();
+
+    </script>
+    
+
+</body>
+</html>
+
+</body>
+</html>

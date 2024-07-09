@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visit History</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Website Visit History</h1>
+    <div id="controls">
+        <button onclick="startTracking()">Start Tracking</button>
+        <button onclick="stopTracking()">Stop Tracking</button>
+        <button onclick="clearHistory()">Clear History</button>
+    </div>
+    <h2>History:</h2>
+    <ul id="historyList"></ul>
+
+    <script>
+        const historyList = document.getElementById('historyList');
+        let tracking = false;
+
+        // Load history from localStorage on page load
+        window.onload = function() {
+            loadHistory();
+        }
+
+        // Start tracking visits
+        function startTracking() {
+            tracking = true;
+            addVisit();
+        }
+
+        // Stop tracking visits
+        function stopTracking() {
+            tracking = false;
+        }
+
+        // Add a visit to the history
+        function addVisit() {
+            if (tracking) {
+                const visitTime = new Date().toLocaleString();
+                let visitHistory = JSON.parse(localStorage.getItem('visitHistory')) || [];
+                visitHistory.push(visitTime);
+                localStorage.setItem('visitHistory', JSON.stringify(visitHistory));
+                displayHistory();
+                setTimeout(addVisit, 5000); // Example: Add a visit every 5 seconds
+            }
+        }
+
+        // Load and display history
+        function loadHistory() {
+            displayHistory();
+        }
+
+        // Display visit history
+        function displayHistory() {
+            historyList.innerHTML = '';
+            const visitHistory = JSON.parse(localStorage.getItem('visitHistory')) || [];
+            visitHistory.forEach((visit, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${index + 1}. ${visit}`;
+                historyList.appendChild(li);
+            });
+        }
+
+        // Clear visit history
+        function clearHistory() {
+            localStorage.removeItem('visitHistory');
+            displayHistory();
+        }
+    </script>
+</body>
+</html>
